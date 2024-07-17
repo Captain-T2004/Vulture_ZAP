@@ -3,16 +3,10 @@ import time
 from zapv2 import ZAPv2
 from utils_common import generate_random
 
-zap = ZAPv2(apikey="")
-baseurl = "localhost"
-
 def spider_scan(target):
     try:
         scanID = zap.spider.scan(target)
-        timeout = time.time() + 60*2
         while int(zap.spider.status(scanID)) < 100:
-            if time.time() > timeout:
-                break
             time.sleep(1)
         Results = zap.spider.results(scanID)
         return Results
@@ -73,14 +67,14 @@ def limit_pscan():
             headers=headers,
         )
         """
-            Information Leakage 10044
-            Cross-Site Scripting (XSS) 10031
-            Content Security Policy (CSP) Violations 10055
-            Cross-Origin Resource Sharing (CORS) Issues 10098
-            Information Disclosure: Suspicious Comments 10027
-            Directory Listing 10033
-            Server Leaks Information via “X-Powered-By” HTTP Response Header Field(s) 10037
-        """
+	        Information Leakage 10044
+	        Cross-Site Scripting (XSS) 10031
+	        Content Security Policy (CSP) Violations 10055
+	        Cross-Origin Resource Sharing (CORS) Issues 10098
+	        Information Disclosure: Suspicious Comments 10027
+	        Directory Listing 10033
+	        Server Leaks Information via “X-Powered-By” HTTP Response Header Field(s) 10037
+	    """
         res = requests.get(
             "http://localhost:8080/JSON/pscan/action/enableScanners/",
             params={"ids": "10044,10031,10055,10098,10027,10033,10037"},
@@ -88,8 +82,8 @@ def limit_pscan():
         )
         return res.json()
     except Exception as e:
-        print(e)
-        return None
+    	print(e)
+    	return None
 
 def limit_ascan():
     headers = {"Accept": "application/json"}
@@ -99,12 +93,12 @@ def limit_ascan():
             headers=headers,
         )
         """
-            .env Information Leak 40034
-            .htaccess Information Leak 40032
-            Code Injection 90019
-            Cross Site Scripting (Reflected) 40012
-            SQL Injection 40018
-        """
+	        .env Information Leak 40034
+	        .htaccess Information Leak 40032
+	        Code Injection 90019
+	        Cross Site Scripting (Reflected) 40012
+	        SQL Injection 40018
+	    """
         res = requests.get(
             "http://localhost:8080/JSON/ascan/action/enableScanners/",
             params={"ids": "40034,40032,90019,40012,40018"},
@@ -116,7 +110,7 @@ def limit_ascan():
 
 def report(target):
     headers = {"Accept": "application/html"}
-    name = generate_random(10)
+    name = generate_random()
     try:
         requests.get(
             "http://localhost:8080/JSON/reports/action/generate/",
@@ -125,7 +119,7 @@ def report(target):
                 "template": "traditional-pdf",
                 "sites": target,
                 "reportFileName": name,
-                "reportDir": "/home/ubuntu/Vulture_ZAP/static",
+                "reportDir": "/home/ubuntu/vulture_ZAP/static",
             },
             headers=headers,
         )
